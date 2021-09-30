@@ -56,7 +56,7 @@ function App() {
   return (
     <div className="w-full">
       <div className="w-1/2 my-16 mx-auto p-10 border shadow rounded-lg ">
-
+        d
         <select
           onChange={handleSubscribers}
           className="block shadow border rounded mb-4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
