@@ -55,7 +55,7 @@ function App() {
     {
       id: 'runAbandon',
       data: { label: <RunAbandon handleChange={(e) => handleRunAbandon(e)} /> },
-      position: { x: 400, y: 250 },
+      position: { x: 100, y: 350 },
       style: { ...flowBoxStyle },
       isHidden: true
     },
