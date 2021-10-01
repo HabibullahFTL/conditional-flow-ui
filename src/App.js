@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './App.css';
 import AbandomModal from './components/AbandomModal/AbandomModal';
+import CustomModal from './components/CustomModal/CustomModal';
 import SendMessage from './components/SendMessageModal/SendMessage';
 
 function App() {
@@ -56,6 +57,7 @@ function App() {
   return (
     <div className="w-full">
       <div className="w-1/2 my-16 mx-auto p-10 border shadow rounded-lg ">
+        <CustomModal isOpen={true} > fff</CustomModal>
         <select
           onChange={handleSubscribers}
           className="block shadow border rounded mb-4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
