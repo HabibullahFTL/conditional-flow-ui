@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './App.css';
 import AbandomModal from './components/AbandomModal/AbandomModal';
 import SendMessage from './components/SendMessageModal/SendMessage';
+import ReactFlow from 'react-flow-renderer';
 
 function App() {
   const [showWhenOrders, setShowWhenOrders] = useState(false);
@@ -53,9 +54,45 @@ function App() {
     }
   }
 
+  const elements = [
+    {
+      id: '1',
+      type: 'input', 
+      data: { label: <select
+        onChange={handleSubscribers}
+        className="block shadow border rounded mb-4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <option value="" className="hidden">Select one</option>
+        <option value="USER_SUBSCRIBES">USER SUBSCRIBERS</option>
+        <option value="USER_ORDERS">USER ORDERS</option>
+      </select> },
+      position: { x: 250, y: 25 },
+    },
+
+    {
+      id: '2',
+      data: { label: <div>Default Node</div> },
+      position: { x: 100, y: 125 },
+    },
+    {
+      id: '3',
+      type: 'output', 
+      data: { label: 'Output Node' },
+      position: { x: 250, y: 250 },
+    },
+    
+    { id: 'e1-2', source: '1', target: '2', animated: true },
+    { id: 'e2-3', source: '2', target: '3' },
+  ];
+
   return (
     <div className="w-full">
+
+        <div style={{ height: 300 }}>
+          <ReactFlow elements={elements} />
+        </div>
+
       <div className="w-1/2 my-16 mx-auto p-10 border shadow rounded-lg ">
+
         <select
           onChange={handleSubscribers}
           className="block shadow border rounded mb-4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
