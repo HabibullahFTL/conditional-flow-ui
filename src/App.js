@@ -10,7 +10,7 @@ import WhenOrders from './components/SelectBoxes/WhenOrders';
 import SendMessage from './components/SendMessageModal/SendMessage';
 
 const flowBoxStyle = {
-  width: "200px",
+  width: "180px",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
@@ -34,28 +34,28 @@ function App() {
     {
       id: 'whenOrders',
       data: { label: <WhenOrders handleChange={(e) => handleWhenOrders(e)} /> },
-      position: { x: 100, y: 125 },
+      position: { x: 250, y: 125 },
       style: { ...flowBoxStyle },
       isHidden: true
     },
     {
       id: 'userOrders',
       data: { label: <UserOrders handleChange={(e) => handleUserOrders(e)} /> },
-      position: { x: 100, y: 250 },
+      position: { x: 250, y: 250 },
       style: { ...flowBoxStyle },
       isHidden: true
     },
     {
       id: 'tagUser',
       data: { label: <TagUser handleChange={(e) => handleSendMessage(e)} /> },
-      position: { x: 100, y: 350 },
+      position: { x: 480, y: 250 },
       style: { ...flowBoxStyle },
       isHidden: true
     },
     {
       id: 'runAbandon',
       data: { label: <RunAbandon handleChange={(e) => handleRunAbandon(e)} /> },
-      position: { x: 100, y: 350 },
+      position: { x: 250, y: 350 },
       style: { ...flowBoxStyle },
       isHidden: true
     },
