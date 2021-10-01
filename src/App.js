@@ -1,8 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactFlow from 'react-flow-renderer';
 import './App.css';
 import AbandomModal from './components/AbandomModal/AbandomModal';
+import RunAbandon from './components/SelectBoxes/RunAbandon';
+import Subscribers from './components/SelectBoxes/Subscribers';
+import TagUser from './components/SelectBoxes/TagUser';
+import UserOrders from './components/SelectBoxes/UserOrders';
+import WhenOrders from './components/SelectBoxes/WhenOrders';
 import SendMessage from './components/SendMessageModal/SendMessage';
+
+const flowBoxStyle = {
+  width: "200px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  border: "1px solid #222"
+}
 
 function App() {
   const [showWhenOrders, setShowWhenOrders] = useState(false);
@@ -11,6 +24,58 @@ function App() {
   const [showAbandon, setShowAbandon] = useState(false);
   const [showSendMessageModal, setShowSendMessageModal] = useState(false)
   const [showAbandonModal, setshowAbandonModal] = useState(false)
+  const [elements, setElements] = useState([
+    {
+      id: 'subscribers',
+      data: { label: <Subscribers handleChange={(e) => handleSubscribers(e)} /> },
+      position: { x: 250, y: 25 },
+      style: flowBoxStyle
+    },
+    {
+      id: 'whenOrders',
+      data: { label: <WhenOrders handleChange={(e) => handleWhenOrders(e)} /> },
+      position: { x: 100, y: 125 },
+      style: { ...flowBoxStyle },
+      isHidden: true
+    },
+    {
+      id: 'userOrders',
+      data: { label: <UserOrders handleChange={(e) => handleUserOrders(e)} /> },
+      position: { x: 100, y: 250 },
+      style: { ...flowBoxStyle },
+      isHidden: true
+    },
+    {
+      id: 'tagUser',
+      data: { label: <TagUser handleChange={(e) => handleSendMessage(e)} /> },
+      position: { x: 100, y: 350 },
+      style: { ...flowBoxStyle },
+      isHidden: true
+    },
+    {
+      id: 'runAbandon',
+      data: { label: <RunAbandon handleChange={(e) => handleRunAbandon(e)} /> },
+      position: { x: 400, y: 250 },
+      style: { ...flowBoxStyle },
+      isHidden: true
+    },
+
+    { id: 'e1-2', source: 'subscribers', target: 'whenOrders' },
+    { id: 'e2-3', source: 'whenOrders', target: 'userOrders' },
+    { id: 'e3-4', source: 'userOrders', target: 'tagUser' },
+    { id: 'e3-5', source: 'userOrders', target: 'runAbandon' },
+  ])
+
+
+  useEffect(() => {
+    setElements((els) => els.map((el) => {
+      if (el.id === 'whenOrders') { el.isHidden = !showWhenOrders }
+      if (el.id === 'userOrders') { el.isHidden = !showUserOrders }
+      if (el.id === 'tagUser') { el.isHidden = !showTagUser }
+      if (el.id === 'runAbandon') { el.isHidden = !showAbandon }
+      return el
+    }))
+  }, [showWhenOrders, showUserOrders, showTagUser, showAbandon])
 
   const handleSubscribers = (e) => {
     if (e.target.value === 'USER_SUBSCRIBES' || e.target.value === 'USER_ORDERS') {
@@ -45,110 +110,21 @@ function App() {
   }
   const handleRunAbandon = (e) => {
     if (e.target.value === 'yes') {
-      setShowWhenOrders(false)
-      setShowUserOrders(false)
-      setShowTagUser(false)
-      setShowAbandon(false)
-      setShowSendMessageModal(false)
       setshowAbandonModal(true)
     }
   }
 
-  const elements = [
-    {
-      id: '1',
-      type: 'input',
-      data: {
-        label: <select
-          onChange={handleSubscribers}
-          className="block shadow border rounded mb-4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-          <option value="" className="hidden">Select one</option>
-          <option value="USER_SUBSCRIBES">USER SUBSCRIBERS</option>
-          <option value="USER_ORDERS">USER ORDERS</option>
-        </select>
-      },
-      position: { x: 250, y: 25 },
-    },
-
-    {
-      id: '2',
-      data: { label: <div>Default Node</div> },
-      position: { x: 100, y: 125 },
-    },
-    {
-      id: '3',
-      type: 'output',
-      data: { label: 'Output Node' },
-      position: { x: 250, y: 250 },
-    },
-
-    { id: 'e1-2', source: '1', target: '2', animated: true },
-    { id: 'e2-3', source: '2', target: '3' },
-  ];
 
   return (
     <div className="w-full">
 
-      <div style={{ height: 300 }}>
+      <div className="h-screen block w-full">
         <ReactFlow elements={elements} />
       </div>
 
-      <div className="w-1/2 my-16 mx-auto p-10 border shadow rounded-lg ">
-        <select
-          onChange={handleSubscribers}
-          className="block shadow border rounded mb-4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-          <option value="" className="hidden">Select one</option>
-          <option value="USER_SUBSCRIBES">USER SUBSCRIBERS</option>
-          <option value="USER_ORDERS">USER ORDERS</option>
-        </select>
+      <SendMessage isOpen={showSendMessageModal} />
+      <AbandomModal isOpen={showAbandonModal} />
 
-        {
-          showWhenOrders &&
-          <select
-            onChange={handleWhenOrders}
-            className="block shadow border rounded mb-4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            <option value="" className="hidden">When Orders</option>
-            <option value="USER_ORDERS">USER ORDERS</option>
-            <option value="USER_ABANDONS_CX">USER ABANDONS CX</option>
-            <option value="ORDER_COMPLETED">ORDER COMPLETED</option>
-          </select>
-        }
-
-        {
-          showUserOrders &&
-          <select
-            onChange={handleUserOrders}
-            className="block shadow border rounded mb-4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            <option value="" className="hidden">User Orders</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
-        }
-
-        {
-          showTagUser &&
-          <select
-            onChange={handleSendMessage}
-            className="block shadow border rounded mb-4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-green-500">
-            <option value="" className="hidden">Tag User</option>
-            <option value="send_message">Send Message</option>
-          </select>
-        }
-
-        {
-          showAbandon &&
-          <select
-            onChange={handleRunAbandon}
-            className="block shadow border rounded mb-4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-green-500">
-            <option value="" className="hidden">Run Abandon Checkol</option>
-            <option value="yes">Yes, Abandon</option>
-          </select>
-        }
-
-        <SendMessage isOpen={showSendMessageModal} />
-        <AbandomModal isOpen={showAbandonModal} />
-
-      </div>
     </div>
   );
 }
